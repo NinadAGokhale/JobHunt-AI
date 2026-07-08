@@ -1,12 +1,12 @@
 import Database from 'better-sqlite3'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { mkdir } from 'fs/promises'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DB_PATH = join(__dirname, '..', 'data', 'jobhunt.db')
 
-export function initDB() {
-  const { mkdir } = await import('fs/promises')
+export async function initDB() {
   await mkdir(join(__dirname, '..', 'data'), { recursive: true })
 
   const db = new Database(DB_PATH)

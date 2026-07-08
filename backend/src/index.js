@@ -8,7 +8,12 @@ const PORT = 3001
 app.use(cors())
 app.use(express.json())
 
-const db = initDB()
+let db
+
+initDB().then(d => { db = d }).catch(err => {
+  console.error('Failed to init DB:', err)
+  process.exit(1)
+})
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
@@ -22,11 +27,15 @@ app.get('/api/stats', (req, res) => {
 })
 
 app.get('/api/jobs', (req, res) => {
-  const { status, source, sort = '-score' } = req.query
+  const { status, source, sort = '-score', search = '' } = req.query
   let query = 'SELECT * FROM jobs'
   const conditions = []
   const params = {}
 
+  if (search) {
+    conditions.push('(title LIKE @search OR company LIKE @search)')
+    params.search = `%${search}%`
+  }
   if (status && status !== 'all') {
     conditions.push('status = @status')
     params.status = status
@@ -53,7 +62,12 @@ app.get('/api/jobs/:id', (req, res) => {
 
 app.post('/api/scan', (req, res) => {
   const { roles = [], locations = [], sources = {} } = req.body
+  console.log(`Scan request: ${roles.join(', ')} in ${locations.join(', ')} sources: ${Object.keys(sources).filter(k => sources[k]).join(', ')}`)
   res.json({ status: 'scanning', message: `Scanning ${Object.keys(sources).filter(k => sources[k]).join(', ')} for ${roles.join(', ')} in ${locations.join(', ')}` })
+})
+
+app.post('/api/scan/status', (req, res) => {
+  res.json({ status: 'idle', progress: null })
 })
 
 app.listen(PORT, () => {
