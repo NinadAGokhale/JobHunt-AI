@@ -1,0 +1,16 @@
+{
+  "name": "jobhunt-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered job search assistant — scan, match, apply",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "setup": "cd backend && npm install && cd ../frontend && npm install",
+    "doctor": "node scripts/doctor.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

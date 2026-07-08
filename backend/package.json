@@ -1,0 +1,17 @@
+{
+  "name": "jobhunt-ai-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "playwright": "^1.58.0",
+    "uuid": "^10.0.0"
+  }
+}
